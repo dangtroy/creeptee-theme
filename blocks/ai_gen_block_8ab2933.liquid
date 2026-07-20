@@ -1,0 +1,384 @@
+{% doc %}
+  @prompt
+    an auto sized image desktop and mobile responsive banner with media overlay. different images for desktop and mobile version. entire banner is clickable with a link
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-responsive-banner-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-responsive-banner-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .ai-responsive-banner-image-mobile-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-responsive-banner-placeholder-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-responsive-banner-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 400px;
+  }
+
+  .ai-responsive-banner-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-responsive-banner-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    pointer-events: none;
+  }
+
+  .ai-responsive-banner-content-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: {{ block.settings.content_vertical_alignment }};
+    align-items: {{ block.settings.content_horizontal_alignment }};
+    padding: 40px;
+    text-align: {{ block.settings.text_alignment }};
+    pointer-events: none;
+  }
+
+  .ai-responsive-banner-heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    text-transform: {{ block.settings.heading_case }};
+    line-height: 1.2;
+  }
+
+  .ai-responsive-banner-text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-responsive-banner-image-desktop-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-responsive-banner-image-mobile-{{ ai_gen_id }} {
+      display: block;
+    }
+
+    .ai-responsive-banner-placeholder-{{ ai_gen_id }} {
+      min-height: 300px;
+    }
+
+    .ai-responsive-banner-content-{{ ai_gen_id }} {
+      padding: 20px;
+    }
+
+    .ai-responsive-banner-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+    }
+
+    .ai-responsive-banner-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<a
+  href="{{ block.settings.banner_link | default: '#' }}"
+  class="ai-responsive-banner-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+  {% unless block.settings.banner_link %}onclick="return false;"{% endunless %}
+>
+  {% if block.settings.desktop_image or block.settings.mobile_image %}
+    {% if block.settings.desktop_image %}
+      <img
+        src="{{ block.settings.desktop_image | image_url: width: 2000 }}"
+        alt="{{ block.settings.desktop_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.desktop_image.width }}"
+        height="{{ block.settings.desktop_image.height }}"
+        class="ai-responsive-banner-image-{{ ai_gen_id }} ai-responsive-banner-image-desktop-{{ ai_gen_id }}"
+      >
+    {% endif %}
+
+    {% if block.settings.mobile_image %}
+      <img
+        src="{{ block.settings.mobile_image | image_url: width: 1000 }}"
+        alt="{{ block.settings.mobile_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.mobile_image.width }}"
+        height="{{ block.settings.mobile_image.height }}"
+        class="ai-responsive-banner-image-{{ ai_gen_id }} ai-responsive-banner-image-mobile-{{ ai_gen_id }}"
+      >
+    {% elsif block.settings.desktop_image %}
+      <img
+        src="{{ block.settings.desktop_image | image_url: width: 1000 }}"
+        alt="{{ block.settings.desktop_image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.desktop_image.width }}"
+        height="{{ block.settings.desktop_image.height }}"
+        class="ai-responsive-banner-image-{{ ai_gen_id }} ai-responsive-banner-image-mobile-{{ ai_gen_id }}"
+      >
+    {% endif %}
+  {% else %}
+    <div class="ai-responsive-banner-placeholder-{{ ai_gen_id }}">
+      {{ 'hero-apparel-1' | placeholder_svg_tag }}
+      <div class="ai-responsive-banner-empty-state-{{ ai_gen_id }}">
+        Add images for desktop and mobile
+      </div>
+    </div>
+  {% endif %}
+
+  {% if block.settings.overlay_opacity > 0 %}
+    <div class="ai-responsive-banner-overlay-{{ ai_gen_id }}"></div>
+  {% endif %}
+
+  {% if block.settings.heading != blank or block.settings.text != blank %}
+    <div class="ai-responsive-banner-content-{{ ai_gen_id }}">
+      {% if block.settings.heading != blank %}
+        <h2 class="ai-responsive-banner-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      {% endif %}
+      {% if block.settings.text != blank %}
+        <div class="ai-responsive-banner-text-{{ ai_gen_id }}">{{ block.settings.text }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+</a>
+
+{% schema %}
+{
+  "name": "Responsive banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your banner heading"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Add descriptive text for your banner"
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Banner link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal_alignment",
+      "label": "Horizontal alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "heading_case",
+      "label": "Heading case",
+      "options": [
+        {
+          "value": "none",
+          "label": "Default"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Responsive banner"
+    }
+  ]
+}
+{% endschema %}
