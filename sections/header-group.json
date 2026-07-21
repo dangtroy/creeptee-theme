@@ -17,7 +17,7 @@
         "announcement_BxgCk9": {
           "type": "_announcement",
           "settings": {
-            "text": "SHOP THE HALLOWEEN COLLECTION",
+            "text": "",
             "link": "",
             "font": "var(--font-heading--family)",
             "font_size": "1rem",
@@ -110,35 +110,10 @@
         "enable_transparent_header_collection": false,
         "collection_color_scheme": "default"
       }
-    },
-    "custom_liquid_7Atrpt": {
-      "type": "custom-liquid",
-      "name": "t:names.custom_liquid",
-      "settings": {
-        "custom_liquid": "<style>\n#summoned-bar{\n  position:sticky;\n  top:0;\n  left:0;\n  width:100%;\n  background:#890000;\n  color:#f2efe9;\n  z-index:99999;\n  display:none;\n  justify-content:center;\n  align-items:center;\n  gap:12px;\n  padding:12px 20px;\n  font-size:14px;\n  font-weight:700;\n  text-align:center;\n  letter-spacing:.3px;\n}\n\n#summoned-timer{\n  background:black;\n  padding:6px 10px;\n  border-radius:5px;\n  min-width:64px;\n  font-variant-numeric:tabular-nums;\n}\n</style>\n\n<div id=\"summoned-bar\">\n  <span>\n    YOUR DISCOUNT IS ACTIVATED. CHECKOUT NOW FOR A FREE TEE, JUST PAY SHIPPING.\n  </span>\n\n  <span id=\"summoned-timer\">10:00</span>\n</div>\n\n<script>\n(function(){\n\nconst STORAGE_KEY = \"summoned_end\";\nconst DURATION = 10 * 60 * 1000;\n\nconst url = window.location.href.toUpperCase();\n\nif(url.includes(\"SUMMONED\")){\n    if(!sessionStorage.getItem(STORAGE_KEY)){\n        sessionStorage.setItem(\n            STORAGE_KEY,\n            Date.now() + DURATION\n        );\n    }\n}\n\nconst end = Number(sessionStorage.getItem(STORAGE_KEY));\n\nif(!end) return;\n\nconst bar = document.getElementById(\"summoned-bar\");\nconst timer = document.getElementById(\"summoned-timer\");\n\nbar.style.display = \"flex\";\n\nfunction update(){\n\n    const remaining = end - Date.now();\n\n    if(remaining <= 0){\n        sessionStorage.removeItem(STORAGE_KEY);\n        bar.remove();\n        return;\n    }\n\n    const mins = Math.floor(remaining / 60000);\n    const secs = Math.floor((remaining % 60000)/1000);\n\n    timer.textContent =\n        String(mins).padStart(2,\"0\") +\n        \":\" +\n        String(secs).padStart(2,\"0\");\n}\n\nupdate();\nsetInterval(update,1000);\n\n})();\n</script>",
-        "color_scheme": "",
-        "section_width": "full-width",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
-    "custom_liquid_CVDLQD": {
-      "type": "custom-liquid",
-      "disabled": true,
-      "name": "t:names.custom_liquid",
-      "settings": {
-        "custom_liquid": "<style>\n  .creep-announce {\n    letter-spacing: 1px;\n    text-align: center;\n    font-size: 18px;\n font-weight: bold;\n    line-height: 1.8;\n    margin: 0;\n    padding: 0 10px;\n  }\n\n  .creep-code {\n    background: #890000;\n    color: #f2efe9;\n    padding: 2px 10px;\n    margin-left: 4px;\n    font-weight: 700;\n    letter-spacing: 2px;\n    border-radius: 2px;\n    display: inline-block;\n    transform: rotate(-1.5deg);\n    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);\n    animation: creep-pulse 2s ease-in-out infinite;\n    white-space: nowrap;\n  }\n\n  @keyframes creep-pulse {\n    0%, 100% { box-shadow: 2px 2px 0 rgba(0,0,0,0.4), 0 0 0 rgba(137,0,0,0); }\n    50% { box-shadow: 2px 2px 0 rgba(0,0,0,0.4), 0 0 12px rgba(137,0,0,0.8); }\n  }\n\n  /* Mobile */\n  @media (max-width: 640px) {\n    .creep-announce {\n      font-size: 16px;\n      letter-spacing: 0.5px;\n      line-height: 2;\n    }\n\n    .creep-code {\n      padding: 1px 8px;\n      letter-spacing: 1.5px;\n    }\n\n    /* Hide the bullets on mobile so lines break clean */\n    .creep-announce .creep-dot {\n      display: none;\n    }\n\n    /* Stack into two tidy lines */\n    .creep-announce .creep-line {\n      display: block;\n    }\n  }\n</style>\n\n<p class=\"creep-announce\">\n  <span class=\"creep-line\">FREE TEE <span class=\"creep-dot\">&bull;</span> JUST PAY $6.95 SHIPPING</span>\n  <span class=\"creep-dot\">&bull;</span>\n  <span class=\"creep-line\">USE CODE: <span class=\"creep-code\">FREEDOM</span></span>\n</p>",
-        "color_scheme": "scheme-3",
-        "section_width": "page-width",
-        "padding-block-start": 10,
-        "padding-block-end": 10
-      }
     }
   },
   "order": [
     "header_announcements_9jGBFp",
-    "header_section",
-    "custom_liquid_7Atrpt",
-    "custom_liquid_CVDLQD"
+    "header_section"
   ]
 }
