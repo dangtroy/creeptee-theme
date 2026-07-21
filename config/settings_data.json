@@ -68,7 +68,7 @@
     "show_cart_note": false,
     "show_add_discount_code": true,
     "show_installments": false,
-    "show_accelerated_checkout_buttons": false,
+    "show_accelerated_checkout_buttons": true,
     "drawer_color_scheme": "scheme-58084d4c-a86e-4d0a-855e-a0966e5043f7",
     "drawer_drop_shadow": true,
     "icon_stroke": "default",

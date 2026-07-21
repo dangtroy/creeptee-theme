@@ -850,7 +850,7 @@
             "signup_subtext": {
               "type": "text",
               "settings": {
-                "text": "<p>New drops, restocks, and first access — no spam.</p>",
+                "text": "<p>Get 10% off your first order, plus new drops, restocks, and first access — no spam.</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
